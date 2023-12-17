@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lista_tarefas_flutter/helper/AnotationHelper.dart';
 import 'package:lista_tarefas_flutter/model/Anotation.dart';
 import 'package:lista_tarefas_flutter/shared/themes/color_schemes.g.dart';
@@ -249,6 +251,9 @@ class _Inicial_PageState extends State<Inicial_Page> {
         title: Text("Tarefax",style: TextStyle(color: Colors.white),),
         centerTitle: true,
         backgroundColor: lightColorScheme.primary,
+        actions: [
+          IconButton(onPressed: (){}, icon: Icon(Icons.bedtime,color: Colors.white,))
+        ],
       ),
       body: Column(
           children: <Widget>[
@@ -258,11 +263,22 @@ class _Inicial_PageState extends State<Inicial_Page> {
                 itemBuilder: (context, index){
                   final item = _tarefas[index];
                   Color _cardColor = _getPriorityColor(item.prioridade);
-                  return Card(
-                    color: _cardColor,
-                    child: ListTile(
-                      title: Text(item.titulo),
-                      subtitle: Text(item.descricao),
+                  return Dismissible(
+                    background: Container(
+                      //color: Colors.redAccent,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Color(0xffff8080),
+                      ),
+                    ),
+                    key: Key(item.codtarefa.toString()),
+                    direction: DismissDirection.horizontal,
+                    child: Card(
+                      color: _cardColor,
+                      child: ListTile(
+                        title: Text(item.titulo),
+                        subtitle: Text(item.descricao),
+                      ),
                     ),
                   );
                 },        

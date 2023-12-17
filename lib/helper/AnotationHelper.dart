@@ -73,4 +73,13 @@ class AnotationHelper {
   }
 
 
+  deleteAnotation(String codtarefa) async {
+    Database bd = await db;
+    await bd.delete(
+      _nomeTabela,
+      where: "$_nomeTabela = ?",
+      whereArgs: [codtarefa]
+      ); 
+  }
+
 }

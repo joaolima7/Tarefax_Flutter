@@ -77,7 +77,7 @@ class AnotationHelper {
     Database bd = await db;
     await bd.delete(
       _nomeTabela,
-      where: "$_nomeTabela = ?",
+      where: "codtarefa = ?",
       whereArgs: [codtarefa]
       ); 
   }

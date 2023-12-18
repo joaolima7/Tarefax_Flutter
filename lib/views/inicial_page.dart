@@ -17,6 +17,7 @@ class Inicial_Page extends StatefulWidget {
 class _Inicial_PageState extends State<Inicial_Page> {
 
   List<Anotation> _tarefas = [];
+  List _tarefasSelecionadas = [];
   var _db = AnotationHelper();
   String? _escolhaPrioridade="";
   Icon _iconTarefas = Icon(Icons.home);
@@ -26,6 +27,75 @@ class _Inicial_PageState extends State<Inicial_Page> {
 
   TextEditingController _txtTitulo = TextEditingController();
   TextEditingController _txtDesc = TextEditingController();
+
+
+  _confirmDelete(){
+     showDialog(
+      context: context,
+      builder: (context){
+        return AlertDialog(
+          title: Text("Confirma exclusão de ${_tarefasSelecionadas.length.toString()} Tarefa(s)?",textAlign: TextAlign.center,),
+          actions: [
+            ElevatedButton(
+              onPressed: (){Navigator.pop(context);},
+              child: Text("Não")
+              ),
+              ElevatedButton(
+              onPressed: (){
+                for(var item in _tarefasSelecionadas){
+                 _db.deleteAnotation(item.toString());
+                }
+                setState(() {
+                 _tarefasSelecionadas.clear();
+                _listAnotation();
+                Navigator.pop(context);
+                });
+              },
+              child: Text("Sim")
+              ),
+          ],
+        );
+      }
+      );
+  }
+
+  _appBarDinamyc(){
+
+    if(_tarefasSelecionadas.isEmpty){
+      return AppBar(
+        title: Text("Tarefax",style: TextStyle(color: Colors.white),),
+        centerTitle: true,
+        backgroundColor: lightColorScheme.primary,
+        actions: [
+          IconButton(onPressed: (){}, icon: Icon(Icons.bedtime,color: Colors.white,))
+        ],
+      );
+    }
+    else {
+      return AppBar(
+        title: Text(_tarefasSelecionadas.length.toString()+" selecionada(s)",style: TextStyle(color: Colors.white),),
+        centerTitle: true,
+        backgroundColor: lightColorScheme.primary,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,color: Colors.white,),
+          onPressed: (){
+            setState(() {
+              _tarefasSelecionadas = [];
+            });
+          },
+        ),
+        actions: [
+          IconButton(
+          onPressed: (){
+            _confirmDelete();
+          },
+          icon: Icon(Icons.delete,color: Colors.white,))
+        ],
+      );
+    }
+
+  }
+
 
   Color _getPriorityColor(String priority) {
   switch (priority) {
@@ -247,14 +317,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Tarefax",style: TextStyle(color: Colors.white),),
-        centerTitle: true,
-        backgroundColor: lightColorScheme.primary,
-        actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.bedtime,color: Colors.white,))
-        ],
-      ),
+      appBar: _appBarDinamyc(),
       body: Column(
           children: <Widget>[
             Expanded(
@@ -263,22 +326,24 @@ class _Inicial_PageState extends State<Inicial_Page> {
                 itemBuilder: (context, index){
                   final item = _tarefas[index];
                   Color _cardColor = _getPriorityColor(item.prioridade);
-                  return Dismissible(
-                    background: Container(
-                      //color: Colors.redAccent,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Color(0xffff8080),
-                      ),
-                    ),
-                    key: Key(item.codtarefa.toString()),
-                    direction: DismissDirection.horizontal,
-                    child: Card(
-                      color: _cardColor,
-                      child: ListTile(
-                        title: Text(item.titulo),
-                        subtitle: Text(item.descricao),
-                      ),
+                  return Card(
+                    color: _cardColor,
+                    child: ListTile(
+                      selected: _tarefasSelecionadas.contains(item.codtarefa),
+                      //selectedTileColor: lightColorScheme.primary,
+                      //selectedColor: Colors.black,
+                      onLongPress: (){
+                        setState(() {
+                          (_tarefasSelecionadas.contains(item.codtarefa)) ? null : _tarefasSelecionadas.add(item.codtarefa);
+                        });
+                      },
+                      onTap: (){
+                         setState(() {
+                          (_tarefasSelecionadas.contains(item.codtarefa)) ? _tarefasSelecionadas.remove(item.codtarefa) : _tarefasSelecionadas.add(item.codtarefa);
+                        });
+                      },
+                      title: Text(item.titulo,style: TextStyle(fontWeight: FontWeight.bold),),
+                      subtitle: Text(item.descricao+"\n"+item.data,style: TextStyle(fontWeight: FontWeight.w500),),
                     ),
                   );
                 },        

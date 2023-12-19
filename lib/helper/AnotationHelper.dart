@@ -32,23 +32,30 @@ class AnotationHelper {
     return db;
   }
 
-  Future<void> _onCreate(Database db, int version) async {
-    String sql = '''
-      CREATE TABLE tarefa (
-        codtarefa INTEGER PRIMARY KEY AUTOINCREMENT,
-        titulo VARCHAR,
-        descricao TEXT,
-        data DATE,
-        hora TIME,
-        prioridade VARCHAR
-      );
-      CREATE TABLE tema(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        modonoturno BOOLEAN DEFAULT 0
-      );
-    ''';
-    await db.execute(sql);
-  }
+Future<void> _onCreate(Database db, int version) async {
+  String sqlTarefa = '''
+    CREATE TABLE tarefa (
+      codtarefa INTEGER PRIMARY KEY AUTOINCREMENT,
+      titulo VARCHAR,
+      descricao TEXT,
+      data DATE,
+      hora TIME,
+      prioridade VARCHAR
+    );
+  ''';
+
+  String sqlTema = '''
+    CREATE TABLE tema (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      modonoturno VARCHAR DEFAULT 'light'
+    );
+  ''';
+
+  await db.execute(sqlTarefa);
+  await db.execute(sqlTema);
+
+  await db.insert("tema", {"modonoturno": "light"});
+}
 
   Future<int> saveAnotation(Anotation anotation) async {
     Database bd = await db;
@@ -80,6 +87,22 @@ class AnotationHelper {
       where: "codtarefa = ?",
       whereArgs: [codtarefa]
       ); 
+  }
+
+  setTheme(int value) async {
+    Database bd = await db;
+    Map<String, dynamic> temaMap ={
+      "modonoturno": value
+    };
+    bd.update("tema", temaMap, where: "id = ?",whereArgs: [1]);
+  }
+
+  listThemeApp() async {
+    Database bd = await db;
+    String sql = "SELECT * FROM tema";
+    List theme = await bd.rawQuery(sql);
+
+    return theme;
   }
 
 }

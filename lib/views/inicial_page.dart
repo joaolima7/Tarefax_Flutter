@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lista_tarefas_flutter/helper/AnotationHelper.dart';
 import 'package:lista_tarefas_flutter/model/Anotation.dart';
+import 'package:lista_tarefas_flutter/model/ThemeApp.dart';
 import 'package:lista_tarefas_flutter/shared/themes/color_schemes.g.dart';
 import 'package:lista_tarefas_flutter/views/settings_page.dart';
 import 'package:lista_tarefas_flutter/views/tarefas_page.dart';
@@ -25,9 +26,36 @@ class _Inicial_PageState extends State<Inicial_Page> {
   int _controlPages = 0;
   List<Widget> pages = [Tarefas_Page(), Settings_Page()];
 
+
+  late Color foregroundColor;
+  late Color backgroundColor;
+  late Color iconColor;
+
+
   TextEditingController _txtTitulo = TextEditingController();
   TextEditingController _txtDesc = TextEditingController();
 
+
+  _getThemeApp() async {
+    List thema = await _db.listThemeApp();
+    List<ThemeApp> themetemp = [];
+    for(var item in thema){
+      ThemeApp tema = ThemeApp(modonoturno: item["modonoturno"],id: item["id"]);
+      themetemp.add(tema);
+    }
+    var theme = themetemp[0].modonoturno.toString();
+
+    if(theme == "light"){
+      setState(() {
+        
+      });
+    }
+    else if(theme == "dark"){
+      setState(() {
+        
+      });
+    }
+  }
 
   _confirmDelete(){
      showDialog(
@@ -67,7 +95,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
         centerTitle: true,
         backgroundColor: lightColorScheme.primary,
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.bedtime,color: Colors.white,))
+          IconButton(onPressed: (){_getThemeApp();}, icon: Icon(Icons.bedtime,color: Colors.white,))
         ],
       );
     }

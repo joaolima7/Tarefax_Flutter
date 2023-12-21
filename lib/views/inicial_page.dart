@@ -21,6 +21,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
   List _tarefasSelecionadas = [];
   var _db = AnotationHelper();
   String? _escolhaPrioridade="";
+  String? _escolhaEditPrioridade="";
   Icon _iconTarefas = Icon(Icons.home);
   Icon _iconSettings = Icon(Icons.settings);
   int _controlPages = 0;
@@ -29,6 +30,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
 
   late Color foregroundColor;
   late Color backgroundColor;
+  late Color appBarFABColor;
   late Color iconColor;
 
 
@@ -47,7 +49,10 @@ class _Inicial_PageState extends State<Inicial_Page> {
 
     if(theme == "light"){
       setState(() {
-        
+        appBarFABColor = lightColorScheme.primary;
+        backgroundColor = Colors.white;
+        foregroundColor = Colors.white;  
+        iconColor = Colors.white;       
       });
     }
     else if(theme == "dark"){
@@ -95,7 +100,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
         centerTitle: true,
         backgroundColor: lightColorScheme.primary,
         actions: [
-          IconButton(onPressed: (){_getThemeApp();}, icon: Icon(Icons.bedtime,color: Colors.white,))
+         // IconButton(onPressed: (){_getThemeApp();}, icon: Icon(Icons.bedtime,color: Colors.white,))
         ],
       );
     }
@@ -172,6 +177,64 @@ class _Inicial_PageState extends State<Inicial_Page> {
     _escolhaPrioridade = "";
   }
 
+  _editPrioridade() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Prioridade da Tarefa"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                RadioListTile(
+                    title: Text("Baixa"),
+                    value: "b",
+                    groupValue: _escolhaEditPrioridade,
+                    onChanged: (escolha){
+                      setState(() {
+                        _escolhaEditPrioridade = escolha;
+                        Navigator.pop(context);
+                      });
+                    }
+                    ),
+                RadioListTile(
+                    title: Text("Média"),
+                    value: "m",
+                    groupValue: _escolhaEditPrioridade,
+                    onChanged: (escolha){
+                      setState(() {
+                        _escolhaEditPrioridade = escolha;
+                        Navigator.pop(context);
+                      });
+                    }
+                    ),
+                RadioListTile(
+                    title: Text("Alta"),
+                    value: "a",
+                    groupValue: _escolhaEditPrioridade,
+                    onChanged: (escolha){
+                      setState(() {
+                        _escolhaEditPrioridade = escolha;
+                        Navigator.pop(context);
+                      });
+                    }
+                    ),
+              ],
+            ),
+            actions: [
+              Center(
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Cancelar")),
+              ),
+            ],
+          );
+        });
+  }
+
+
   _addPrioridade() {
     showDialog(
         context: context,
@@ -206,10 +269,10 @@ class _Inicial_PageState extends State<Inicial_Page> {
                 RadioListTile(
                     title: Text("Alta"),
                     value: "a",
-                    groupValue: _escolhaPrioridade,
+                    groupValue: _escolhaEditPrioridade,
                     onChanged: (escolha){
                       setState(() {
-                        _escolhaPrioridade = escolha;
+                        _escolhaEditPrioridade = escolha;
                         Navigator.pop(context);
                       });
                     }
@@ -228,6 +291,118 @@ class _Inicial_PageState extends State<Inicial_Page> {
           );
         });
   }
+
+  _editTarefa(int index) {
+    TextEditingController _txtEditTitulo = TextEditingController();
+    TextEditingController _txtEditDesc = TextEditingController(); 
+    _txtEditTitulo.text = _tarefas[index].titulo;
+    _txtEditDesc.text = _tarefas[index].descricao;
+    _escolhaEditPrioridade=_tarefas[index].prioridade;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              "Editar Tarefa",
+              textAlign: TextAlign.center,
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TextField(
+                    controller: _txtEditTitulo,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                        labelText: "Título", hintText: "Ex: Jogar Bola..."),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: TextField(
+                      controller: _txtEditDesc,
+                      decoration: InputDecoration(
+                          labelText: "Descrição",
+                          hintText: "Ex: Levar chuteira azul..."),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          _addPrioridade();
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Icon(Icons.info),
+                            Text("Prioridade"),
+                            Icon(Icons.arrow_right)
+                          ],
+                        )),
+                  )
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _esc();
+                  },
+                  child: Text("Sair")),
+              ElevatedButton(
+                onPressed: () async {
+                  if(_txtTitulo.text == ""){
+                    showDialog(
+                      context: context,
+                      builder: (context){
+                        return AlertDialog(
+                          title: Text("ATENÇÃO", textAlign: TextAlign.center,style: TextStyle(color: Colors.red),),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                            Center(child: Text("Selecione um Título!"),)
+                          ]),
+                          actions: [
+                            Center(child: ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("OK!")))
+                          ],
+                        );
+                      }
+                      );
+                  }
+                  else if(_escolhaPrioridade == ""){
+                    showDialog(
+                      context: context,
+                      builder: (context){
+                        return AlertDialog(
+                          title: Text("ATENÇÃO", textAlign: TextAlign.center,style: TextStyle(color: Colors.red),),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                            Center(child: Text("Selecione a Prioridade da Terefa!"),)
+                          ]),
+                          actions: [
+                            Center(child: ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("OK!")))
+                          ],
+                        );
+                      }
+                      );
+                  }
+                  else{
+                    Anotation _anotation = Anotation(titulo: _txtTitulo.text, descricao: _txtDesc.text, data: DateTime.now().toString(), hora: DateTime.now().toString(), prioridade: _escolhaPrioridade.toString());
+                  await _db.saveAnotation(_anotation);
+                  _esc();
+                  Navigator.pop(context);
+                  _listAnotation();
+                  }
+                },
+                child: Text("Salvar")
+                ),
+            ],
+          );
+        });
+  }
+
 
   _addTarefa() {
     showDialog(
@@ -347,7 +522,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
     return Scaffold(
       appBar: _appBarDinamyc(),
       body: Column(
-          children: <Widget>[
+          children: <Widget>[ 
             Expanded(
               child: ListView.builder(
                 itemCount: _tarefas.length,
@@ -358,7 +533,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                     color: _cardColor,
                     child: ListTile(
                       selected: _tarefasSelecionadas.contains(item.codtarefa),
-                      //selectedTileColor: lightColorScheme.primary,
+                      selectedTileColor: lightColorScheme.inversePrimary,
                       //selectedColor: Colors.black,
                       onLongPress: (){
                         setState(() {
@@ -367,7 +542,15 @@ class _Inicial_PageState extends State<Inicial_Page> {
                       },
                       onTap: (){
                          setState(() {
-                          (_tarefasSelecionadas.contains(item.codtarefa)) ? _tarefasSelecionadas.remove(item.codtarefa) : _tarefasSelecionadas.add(item.codtarefa);
+                          if(_tarefasSelecionadas.contains(item.codtarefa)){
+                            _tarefasSelecionadas.remove(item.codtarefa);
+                          }
+                          else if(_tarefasSelecionadas.isNotEmpty){
+                            _tarefasSelecionadas.add(item.codtarefa);
+                          }
+                          else{
+                            _editTarefa(index);
+                          }
                         });
                       },
                       title: Text(item.titulo,style: TextStyle(fontWeight: FontWeight.bold),),

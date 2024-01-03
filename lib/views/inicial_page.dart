@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lista_tarefas_flutter/helper/AnotationHelper.dart';
 import 'package:lista_tarefas_flutter/model/Anotation.dart';
-import 'package:lista_tarefas_flutter/model/ThemeApp.dart';
 import 'package:lista_tarefas_flutter/shared/themes/color_schemes.g.dart';
 import 'package:lista_tarefas_flutter/views/settings_page.dart';
 import 'package:lista_tarefas_flutter/views/tarefas_page.dart';

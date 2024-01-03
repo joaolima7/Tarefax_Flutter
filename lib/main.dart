@@ -7,6 +7,7 @@ void main(){
   runApp(MaterialApp(
     theme: ThemeData(
       floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: lightColorScheme.primary,
         elevation: 10,
       ),
       appBarTheme: AppBarTheme(
@@ -22,11 +23,14 @@ void main(){
         backgroundColor: Colors.black,
         foregroundColor: Colors.white
       ),
+      listTileTheme: ListTileThemeData(
+        textColor: Colors.black,
+      ),   
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: darkColorScheme.outlineVariant
       ),
     ),
-    //themeMode: ThemeMode.dark,
+    themeMode: ThemeMode.light,
     home: Inicial_Page(),
     debugShowCheckedModeBanner: false,
   ));

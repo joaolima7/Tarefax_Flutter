@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:lista_tarefas_flutter/model/Anotation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Esta classe está usando o padrão SINGLETON
 class AnotationHelper {
@@ -87,6 +89,24 @@ Future<void> _onCreate(Database db, int version) async {
       where: "codtarefa = ?",
       whereArgs: [codtarefa]
       ); 
+  }
+
+  uptadeAnotation(Anotation anotation) async {
+    Database bd = await db;
+    Map<String, dynamic> tarefa = {
+      "titulo": anotation.titulo,
+      "descricao": anotation.descricao,
+      "data": anotation.data,
+      "hora": anotation.hora,
+      "prioridade": anotation.prioridade,
+    };
+
+    bd.update(
+      _nomeTabela,
+      tarefa,
+      where: "codtarefa = ?",
+      whereArgs: [anotation.codtarefa]
+      );
   }
 
   setTheme(int value) async {

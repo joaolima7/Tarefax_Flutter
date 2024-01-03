@@ -7,6 +7,9 @@ import 'package:lista_tarefas_flutter/model/ThemeApp.dart';
 import 'package:lista_tarefas_flutter/shared/themes/color_schemes.g.dart';
 import 'package:lista_tarefas_flutter/views/settings_page.dart';
 import 'package:lista_tarefas_flutter/views/tarefas_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class Inicial_Page extends StatefulWidget {
   const Inicial_Page({super.key});
@@ -38,28 +41,15 @@ class _Inicial_PageState extends State<Inicial_Page> {
   TextEditingController _txtDesc = TextEditingController();
 
 
-  _getThemeApp() async {
-    List thema = await _db.listThemeApp();
-    List<ThemeApp> themetemp = [];
-    for(var item in thema){
-      ThemeApp tema = ThemeApp(modonoturno: item["modonoturno"],id: item["id"]);
-      themetemp.add(tema);
-    }
-    var theme = themetemp[0].modonoturno.toString();
+  _formatDate(String data){
+    initializeDateFormatting("pt_BR");
+    
+    var formater = DateFormat.yMd("pt_BR");
 
-    if(theme == "light"){
-      setState(() {
-        appBarFABColor = lightColorScheme.primary;
-        backgroundColor = Colors.white;
-        foregroundColor = Colors.white;  
-        iconColor = Colors.white;       
-      });
-    }
-    else if(theme == "dark"){
-      setState(() {
-        
-      });
-    }
+    DateTime dataConverted = DateTime.parse(data);
+    String dataFormated = formater.format(dataConverted);
+
+    return dataFormated;
   }
 
   _confirmDelete(){
@@ -98,9 +88,9 @@ class _Inicial_PageState extends State<Inicial_Page> {
       return AppBar(
         title: Text("Tarefax",style: TextStyle(color: Colors.white),),
         centerTitle: true,
-        backgroundColor: lightColorScheme.primary,
+        //backgroundColor: lightColorScheme.primary,
         actions: [
-         // IconButton(onPressed: (){_getThemeApp();}, icon: Icon(Icons.bedtime,color: Colors.white,))
+          //IconButton(onPressed: (){}, icon: Icon(Icons.bedtime,color: Colors.white,))
         ],
       );
     }
@@ -108,7 +98,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
       return AppBar(
         title: Text(_tarefasSelecionadas.length.toString()+" selecionada(s)",style: TextStyle(color: Colors.white),),
         centerTitle: true,
-        backgroundColor: lightColorScheme.primary,
+       // backgroundColor: lightColorScheme.primary,
         leading: IconButton(
           icon: Icon(Icons.arrow_back,color: Colors.white,),
           onPressed: (){
@@ -329,7 +319,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                     padding: EdgeInsets.only(top: 16),
                     child: ElevatedButton(
                         onPressed: () {
-                          _addPrioridade();
+                          _editPrioridade();
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -352,7 +342,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                   child: Text("Sair")),
               ElevatedButton(
                 onPressed: () async {
-                  if(_txtTitulo.text == ""){
+                  if(_txtEditTitulo.text == ""){
                     showDialog(
                       context: context,
                       builder: (context){
@@ -370,7 +360,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                       }
                       );
                   }
-                  else if(_escolhaPrioridade == ""){
+                  else if(_escolhaEditPrioridade == ""){
                     showDialog(
                       context: context,
                       builder: (context){
@@ -389,8 +379,8 @@ class _Inicial_PageState extends State<Inicial_Page> {
                       );
                   }
                   else{
-                    Anotation _anotation = Anotation(titulo: _txtTitulo.text, descricao: _txtDesc.text, data: DateTime.now().toString(), hora: DateTime.now().toString(), prioridade: _escolhaPrioridade.toString());
-                  await _db.saveAnotation(_anotation);
+                    Anotation _anotation = Anotation(codtarefa: _tarefas[index].codtarefa,titulo: _txtEditTitulo.text, descricao: _txtEditDesc.text, data: DateTime.now().toString(), hora: DateTime.now().toString(), prioridade: _escolhaEditPrioridade.toString());
+                  await _db.uptadeAnotation(_anotation);
                   _esc();
                   Navigator.pop(context);
                   _listAnotation();
@@ -520,69 +510,69 @@ class _Inicial_PageState extends State<Inicial_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBarDinamyc(),
-      body: Column(
-          children: <Widget>[ 
-            Expanded(
-              child: ListView.builder(
-                itemCount: _tarefas.length,
-                itemBuilder: (context, index){
-                  final item = _tarefas[index];
-                  Color _cardColor = _getPriorityColor(item.prioridade);
-                  return Card(
-                    color: _cardColor,
-                    child: ListTile(
-                      selected: _tarefasSelecionadas.contains(item.codtarefa),
-                      selectedTileColor: lightColorScheme.inversePrimary,
-                      //selectedColor: Colors.black,
-                      onLongPress: (){
-                        setState(() {
-                          (_tarefasSelecionadas.contains(item.codtarefa)) ? null : _tarefasSelecionadas.add(item.codtarefa);
-                        });
-                      },
-                      onTap: (){
-                         setState(() {
-                          if(_tarefasSelecionadas.contains(item.codtarefa)){
-                            _tarefasSelecionadas.remove(item.codtarefa);
-                          }
-                          else if(_tarefasSelecionadas.isNotEmpty){
-                            _tarefasSelecionadas.add(item.codtarefa);
-                          }
-                          else{
-                            _editTarefa(index);
-                          }
-                        });
-                      },
-                      title: Text(item.titulo,style: TextStyle(fontWeight: FontWeight.bold),),
-                      subtitle: Text(item.descricao+"\n"+item.data,style: TextStyle(fontWeight: FontWeight.w500),),
-                    ),
-                  );
-                },        
-              )
-              ),
-          ],
+        appBar: _appBarDinamyc(),
+        body: Column(
+            children: <Widget>[ 
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _tarefas.length,
+                  itemBuilder: (context, index){
+                    final item = _tarefas[index];
+                    Color _cardColor = _getPriorityColor(item.prioridade);
+                    return Card(
+                      color: _cardColor,
+                      child: ListTile(
+                        selected: _tarefasSelecionadas.contains(item.codtarefa),
+                        selectedTileColor: lightColorScheme.inversePrimary,
+                        //selectedColor: Colors.black,
+                        onLongPress: (){
+                          setState(() {
+                            (_tarefasSelecionadas.contains(item.codtarefa)) ? null : _tarefasSelecionadas.add(item.codtarefa);
+                          });
+                        },
+                        onTap: (){
+                           setState(() {
+                            if(_tarefasSelecionadas.contains(item.codtarefa)){
+                              _tarefasSelecionadas.remove(item.codtarefa);
+                            }
+                            else if(_tarefasSelecionadas.isNotEmpty){
+                              _tarefasSelecionadas.add(item.codtarefa);
+                            }
+                            else{
+                              _editTarefa(index);
+                            }
+                          });
+                        },
+                        title: Text(item.titulo,style: TextStyle(fontWeight: FontWeight.bold),),
+                        subtitle: Text(item.descricao+"\n"+_formatDate(item.data),style: TextStyle(fontWeight: FontWeight.w400),),
+                      ),
+                    );
+                  },        
+                )
+                ),
+            ],
+          ),
+        //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          //backgroundColor: lightColorScheme.primary,
+          foregroundColor: Colors.white,
+          child: Icon(Icons.add),
+          onPressed: () {
+            _addTarefa();
+          },
         ),
-      //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: lightColorScheme.primary,
-        foregroundColor: Colors.white,
-        child: Icon(Icons.add),
-        onPressed: () {
-          _addTarefa();
-        },
-      ),
-     /* bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _controlPages,
-        onTap: (index) {
-          setState(() {
-            _controlPages = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: "TAREFAS"),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: "AJUSTES"),
-        ],
-      ),*/
-    );
+       /* bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _controlPages,
+          onTap: (index) {
+            setState(() {
+              _controlPages = index;
+            });
+          },
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.list), label: "TAREFAS"),
+            BottomNavigationBarItem(icon: Icon(Icons.settings), label: "AJUSTES"),
+          ],
+        ),*/
+      );
   }
 }

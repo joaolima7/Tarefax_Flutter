@@ -164,6 +164,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
     _txtTitulo.clear();
     _txtDesc.clear();
     _escolhaPrioridade = "";
+    _escolhaEditPrioridade = "";
   }
 
   _editPrioridade() {
@@ -261,7 +262,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                     groupValue: _escolhaEditPrioridade,
                     onChanged: (escolha){
                       setState(() {
-                        _escolhaEditPrioridade = escolha;
+                        _escolhaPrioridade = escolha;
                         Navigator.pop(context);
                       });
                     }

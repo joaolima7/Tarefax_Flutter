@@ -9,6 +9,7 @@ import 'package:lista_tarefas_flutter/views/tarefas_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Inicial_Page extends StatefulWidget {
   const Inicial_Page({super.key});
@@ -85,7 +86,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
 
     if(_tarefasSelecionadas.isEmpty){
       return AppBar(
-        title: Text("Tarefax",style: TextStyle(color: Colors.white),),
+        title: Text("Tarefax",style: GoogleFonts.yanoneKaffeesatz(textStyle: TextStyle(color: Colors.white),fontSize: 30)),
         centerTitle: true,
         //backgroundColor: lightColorScheme.primary,
         actions: [
@@ -95,7 +96,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
     }
     else {
       return AppBar(
-        title: Text(_tarefasSelecionadas.length.toString()+" selecionada(s)",style: TextStyle(color: Colors.white),),
+        title: Text(_tarefasSelecionadas.length.toString()+" selecionada(s)",style: GoogleFonts.yanoneKaffeesatz(textStyle: TextStyle(color: Colors.white),fontSize: 30)),
         centerTitle: true,
        // backgroundColor: lightColorScheme.primary,
         leading: IconButton(
@@ -172,12 +173,12 @@ class _Inicial_PageState extends State<Inicial_Page> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Prioridade da Tarefa"),
+            title: Text("Prioridade da Tarefa",style: GoogleFonts.yanoneKaffeesatz()),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 RadioListTile(
-                    title: Text("Baixa"),
+                    title: Text("Baixa",style: GoogleFonts.yanoneKaffeesatz()),
                     value: "b",
                     groupValue: _escolhaEditPrioridade,
                     onChanged: (escolha){
@@ -188,7 +189,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                     }
                     ),
                 RadioListTile(
-                    title: Text("Média"),
+                    title: Text("Média",style: GoogleFonts.yanoneKaffeesatz()),
                     value: "m",
                     groupValue: _escolhaEditPrioridade,
                     onChanged: (escolha){
@@ -199,7 +200,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                     }
                     ),
                 RadioListTile(
-                    title: Text("Alta"),
+                    title: Text("Alta",style: GoogleFonts.yanoneKaffeesatz()),
                     value: "a",
                     groupValue: _escolhaEditPrioridade,
                     onChanged: (escolha){
@@ -217,7 +218,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text("Cancelar")),
+                    child: Text("Cancelar",style: GoogleFonts.yanoneKaffeesatz())),
               ),
             ],
           );
@@ -230,12 +231,12 @@ class _Inicial_PageState extends State<Inicial_Page> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Prioridade da Tarefa"),
+            title: Text("Prioridade da Tarefa",style: GoogleFonts.yanoneKaffeesatz()),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 RadioListTile(
-                    title: Text("Baixa"),
+                    title: Text("Baixa",style: GoogleFonts.yanoneKaffeesatz()),
                     value: "b",
                     groupValue: _escolhaPrioridade,
                     onChanged: (escolha){
@@ -246,7 +247,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                     }
                     ),
                 RadioListTile(
-                    title: Text("Média"),
+                    title: Text("Média",style: GoogleFonts.yanoneKaffeesatz()),
                     value: "m",
                     groupValue: _escolhaPrioridade,
                     onChanged: (escolha){
@@ -257,7 +258,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                     }
                     ),
                 RadioListTile(
-                    title: Text("Alta"),
+                    title: Text("Alta",style: GoogleFonts.yanoneKaffeesatz()),
                     value: "a",
                     groupValue: _escolhaEditPrioridade,
                     onChanged: (escolha){
@@ -275,7 +276,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text("Cancelar")),
+                    child: Text("Cancelar",style: GoogleFonts.yanoneKaffeesatz())),
               ),
             ],
           );
@@ -295,6 +296,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
             title: Text(
               "Editar Tarefa",
               textAlign: TextAlign.center,
+              style: GoogleFonts.yanoneKaffeesatz()
             ),
             content: SingleChildScrollView(
               child: Column(
@@ -305,6 +307,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                     autofocus: true,
                     decoration: InputDecoration(
                         labelText: "Título", hintText: "Ex: Jogar Bola..."),
+                        style: GoogleFonts.yanoneKaffeesatz()
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 10),
@@ -312,7 +315,8 @@ class _Inicial_PageState extends State<Inicial_Page> {
                       controller: _txtEditDesc,
                       decoration: InputDecoration(
                           labelText: "Descrição",
-                          hintText: "Ex: Levar chuteira azul..."),
+                          hintText: "Ex: Levar chuteira azul...",
+                          ),style: GoogleFonts.yanoneKaffeesatz()
                     ),
                   ),
                   Padding(
@@ -325,7 +329,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Icon(Icons.info),
-                            Text("Prioridade"),
+                            Text("Prioridade",style: GoogleFonts.yanoneKaffeesatz()),
                             Icon(Icons.arrow_right)
                           ],
                         )),
@@ -339,7 +343,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                     Navigator.pop(context);
                     _esc();
                   },
-                  child: Text("Sair")),
+                  child: Text("Sair",style: GoogleFonts.yanoneKaffeesatz())),
               ElevatedButton(
                 onPressed: () async {
                   if(_txtEditTitulo.text == ""){
@@ -347,14 +351,14 @@ class _Inicial_PageState extends State<Inicial_Page> {
                       context: context,
                       builder: (context){
                         return AlertDialog(
-                          title: Text("ATENÇÃO", textAlign: TextAlign.center,style: TextStyle(color: Colors.red),),
+                          title: Text("ATENÇÃO", textAlign: TextAlign.center,style: GoogleFonts.yanoneKaffeesatz(textStyle: TextStyle(color: Colors.red),)),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                            Center(child: Text("Selecione um Título!"),)
+                            Center(child: Text("Selecione um Título!",style: GoogleFonts.yanoneKaffeesatz()),)
                           ]),
                           actions: [
-                            Center(child: ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("OK!")))
+                            Center(child: ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("OK!",style: GoogleFonts.yanoneKaffeesatz())))
                           ],
                         );
                       }
@@ -365,14 +369,14 @@ class _Inicial_PageState extends State<Inicial_Page> {
                       context: context,
                       builder: (context){
                         return AlertDialog(
-                          title: Text("ATENÇÃO", textAlign: TextAlign.center,style: TextStyle(color: Colors.red),),
+                          title: Text("ATENÇÃO",  textAlign: TextAlign.center,style: GoogleFonts.yanoneKaffeesatz(textStyle: TextStyle(color: Colors.red),)),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                            Center(child: Text("Selecione a Prioridade da Terefa!"),)
+                            Center(child: Text("Selecione a Prioridade da Terefa!",style: GoogleFonts.yanoneKaffeesatz()),)
                           ]),
                           actions: [
-                            Center(child: ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("OK!")))
+                            Center(child: ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("OK!",style: GoogleFonts.yanoneKaffeesatz())))
                           ],
                         );
                       }
@@ -386,7 +390,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                   _listAnotation();
                   }
                 },
-                child: Text("Salvar")
+                child: Text("Salvar",style: GoogleFonts.yanoneKaffeesatz())
                 ),
             ],
           );
@@ -402,6 +406,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
             title: Text(
               "Nova Tarefa",
               textAlign: TextAlign.center,
+              style: GoogleFonts.yanoneKaffeesatz()
             ),
             content: SingleChildScrollView(
               child: Column(
@@ -412,6 +417,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                     autofocus: true,
                     decoration: InputDecoration(
                         labelText: "Título", hintText: "Ex: Jogar Bola..."),
+                        style: GoogleFonts.yanoneKaffeesatz()
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 10),
@@ -420,6 +426,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                       decoration: InputDecoration(
                           labelText: "Descrição",
                           hintText: "Ex: Levar chuteira azul..."),
+                          style: GoogleFonts.yanoneKaffeesatz()
                     ),
                   ),
                   Padding(
@@ -432,7 +439,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Icon(Icons.info),
-                            Text("Prioridade"),
+                            Text("Prioridade",style: GoogleFonts.yanoneKaffeesatz()),
                             Icon(Icons.arrow_right)
                           ],
                         )),
@@ -446,7 +453,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                     Navigator.pop(context);
                     _esc();
                   },
-                  child: Text("Sair")),
+                  child: Text("Sair",style: GoogleFonts.yanoneKaffeesatz())),
               ElevatedButton(
                 onPressed: () async {
                   if(_txtTitulo.text == ""){
@@ -454,14 +461,14 @@ class _Inicial_PageState extends State<Inicial_Page> {
                       context: context,
                       builder: (context){
                         return AlertDialog(
-                          title: Text("ATENÇÃO", textAlign: TextAlign.center,style: TextStyle(color: Colors.red),),
+                          title: Text("ATENÇÃO", textAlign: TextAlign.center,style: GoogleFonts.yanoneKaffeesatz(textStyle: TextStyle(color: Colors.red),)),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                            Center(child: Text("Selecione um Título!"),)
+                            Center(child: Text("Selecione um Título!",style: GoogleFonts.yanoneKaffeesatz()),)
                           ]),
                           actions: [
-                            Center(child: ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("OK!")))
+                            Center(child: ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("OK!",style: GoogleFonts.yanoneKaffeesatz())))
                           ],
                         );
                       }
@@ -472,14 +479,14 @@ class _Inicial_PageState extends State<Inicial_Page> {
                       context: context,
                       builder: (context){
                         return AlertDialog(
-                          title: Text("ATENÇÃO", textAlign: TextAlign.center,style: TextStyle(color: Colors.red),),
+                          title: Text("ATENÇÃO", textAlign: TextAlign.center,style: GoogleFonts.yanoneKaffeesatz(textStyle: TextStyle(color: Colors.red),)),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                            Center(child: Text("Selecione a Prioridade da Terefa!"),)
+                            Center(child: Text("Selecione a Prioridade da Terefa!",style: GoogleFonts.yanoneKaffeesatz()),)
                           ]),
                           actions: [
-                            Center(child: ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("OK!")))
+                            Center(child: ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("OK!",style: GoogleFonts.yanoneKaffeesatz())))
                           ],
                         );
                       }
@@ -493,7 +500,7 @@ class _Inicial_PageState extends State<Inicial_Page> {
                   _listAnotation();
                   }
                 },
-                child: Text("Salvar")
+                child: Text("Salvar",style: GoogleFonts.yanoneKaffeesatz())
                 ),
             ],
           );
@@ -543,8 +550,8 @@ class _Inicial_PageState extends State<Inicial_Page> {
                             }
                           });
                         },
-                        title: Text(item.titulo,style: TextStyle(fontWeight: FontWeight.bold),),
-                        subtitle: Text(item.descricao+"\n"+_formatDate(item.data),style: TextStyle(fontWeight: FontWeight.w400),),
+                        title: Text(item.titulo,style: GoogleFonts.yanoneKaffeesatz(textStyle: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),)),
+                        subtitle: Text(item.descricao+"\n"+_formatDate(item.data),style: GoogleFonts.yanoneKaffeesatz(textStyle: TextStyle(fontWeight: FontWeight.w400,fontSize: 16),))
                       ),
                     );
                   },        
